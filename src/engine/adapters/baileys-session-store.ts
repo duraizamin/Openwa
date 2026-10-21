@@ -471,6 +471,18 @@ export class BaileysSessionStore {
     return twins.find(k => this.chats.has(k)) ?? twins.find(k => this.lastMessages.has(k)) ?? this.toEngineJid(jid);
   }
 
+  /**
+   * The `<lid>@lid` this session knows for a 1:1 chat or a person, under any spelling of it, or null
+   * when none is known (and always for a group). WhatsApp keys a lid-migrated contact's chat by its lid.
+   */
+  lidOf(jid: string): string | null {
+    for (const twin of this.chatTwins(jid)) {
+      const parsed = parseWaId(twin);
+      if (parsed.kind === 'lid') return `${parsed.userPart}@lid`;
+    }
+    return null;
+  }
+
   /** Every spelling of one chat this session can connect: the id, its engine form, and its lid or phone twin. */
   private chatTwins(jid: string): string[] {
     const parsed = parseWaId(jid);

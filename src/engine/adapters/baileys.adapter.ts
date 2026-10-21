@@ -47,6 +47,7 @@ import {
   StatusResult,
   ChatSummary,
   StatusPostOptions,
+  StoredChatMessageLookup,
 } from '../interfaces/whatsapp-engine.interface';
 import { EngineNotSupportedError } from '../../common/errors/engine-not-supported.error';
 import { EngineRefusedError } from '../../common/errors/engine-refused.error';
@@ -186,6 +187,7 @@ export class BaileysAdapter implements IWhatsAppEngine {
       listChats: () => this.sessionStore.listChats(),
       lastMessage: chatId => this.sessionStore.lastMessage(chatId),
       lastInboundMessage: chatId => this.sessionStore.lastInboundMessage(chatId),
+      lidOf: jid => this.sessionStore.lidOf(jid),
       upsertContacts: records => this.sessionStore.upsertContacts(records),
       upsertChats: records => this.sessionStore.upsertChats(records),
       removeChats: ids => this.sessionStore.removeChats(ids),
@@ -545,16 +547,16 @@ export class BaileysAdapter implements IWhatsAppEngine {
     return this.messaging.subscribeToPresence(chatId);
   }
 
-  async sendSeen(chatId: string, messageIds?: string[]): Promise<boolean> {
-    return this.contacts.sendSeen(chatId, messageIds);
+  async sendSeen(chatId: string, messageIds?: string[], stored?: StoredChatMessageLookup): Promise<boolean> {
+    return this.contacts.sendSeen(chatId, messageIds, stored);
   }
 
-  async markUnread(chatId: string): Promise<boolean> {
-    return this.contacts.markUnread(chatId);
+  async markUnread(chatId: string, stored?: StoredChatMessageLookup): Promise<boolean> {
+    return this.contacts.markUnread(chatId, stored);
   }
 
-  async deleteChat(chatId: string): Promise<boolean> {
-    return this.contacts.deleteChat(chatId);
+  async deleteChat(chatId: string, stored?: StoredChatMessageLookup): Promise<boolean> {
+    return this.contacts.deleteChat(chatId, stored);
   }
 
   async muteChat(chatId: string, muteUntil: number | null): Promise<void> {
@@ -565,12 +567,12 @@ export class BaileysAdapter implements IWhatsAppEngine {
     return this.contacts.pinChat(chatId, pin);
   }
 
-  async archiveChat(chatId: string, archive: boolean): Promise<boolean> {
-    return this.contacts.archiveChat(chatId, archive);
+  async archiveChat(chatId: string, archive: boolean, stored?: StoredChatMessageLookup): Promise<boolean> {
+    return this.contacts.archiveChat(chatId, archive, stored);
   }
 
-  async clearChatMessages(chatId: string): Promise<boolean> {
-    return this.contacts.clearChatMessages(chatId);
+  async clearChatMessages(chatId: string, stored?: StoredChatMessageLookup): Promise<boolean> {
+    return this.contacts.clearChatMessages(chatId, stored);
   }
 
   // ----- Gated: unsupported on Baileys (reasons inline) -----

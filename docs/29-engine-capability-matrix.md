@@ -967,12 +967,19 @@ adapter boundary — none silently stubs.
   credentials and the session returning to `qr_ready`. Baileys writes only its own credentials and
   showed no such effect. Link by QR when the session of that number must stay up.
 - **`archiveChat` / `clearChatMessages` / `deleteChat` / `sendSeen` / `markUnread` (baileys).** The
-  four `chatModify` actions (archive, clear, delete, unread) need the chat's last known message, which
-  the patch carries. `sendSeen` without message ids is `readMessages([key])` for the newest _received_
-  (not `fromMe`) message, since Baileys drops own keys from a receipt. A chat with no such message
-  resolves `false` rather than throwing, so a chat the session has seen no message in, or one holding
-  only this account's own sends, answers `POST chats/read` with `{"success": false}`, where
-  whatsapp-web.js marks it read from the page-side chat object without needing any local history.
+  four `chatModify` actions (archive, clear, delete, unread) are keyed to the chat's newest message:
+  the one the session holds in memory, else the newest one the gateway stored (#1891). The patch is
+  indexed by the same jid as that message's key: a message in memory under the jid it arrived with,
+  a stored one under the chat's lid when the persisted mapping holds one, else its phone jid; an own
+  group message goes without its participant. With no message at all, clear and delete resolve
+  `false`, and archive and unread are sent without a range for a chat the session knows (a chat
+  record, a persisted state row or a stored message) and resolve `false` otherwise; unread also
+  resolves `false` for an archived chat, which the phone leaves unmarked without a range. `sendSeen`
+  without message ids is `readMessages([key])` for the newest _received_ (not `fromMe`) message, in
+  memory or stored, since Baileys drops own keys from a receipt. A chat with no such message resolves
+  `false`, so one holding only this account's own sends answers `POST chats/read` with
+  `{"success": false}`, where whatsapp-web.js marks it read from the page-side chat object without
+  needing any local history.
 - **`setProfileName` / `setProfilePicture` / `deleteProfilePicture` refusals (baileys).**
   whatsapp-web.js reads a page-side verdict for all three (`setDisplayName` and `setProfilePicture`
   resolve `false`, `deleteProfilePicture` resolves an explicit `false`) and raises a `403`. The

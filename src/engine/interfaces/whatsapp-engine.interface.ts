@@ -1573,30 +1573,70 @@ export interface CatalogCapability {
 }
 
 /**
+ * The newest message the gateway stored for a chat (the `messages` table), in the shape an engine
+ * that keys chat writes to a message needs to rebuild that message's key.
+ */
+export interface StoredChatMessage {
+  /** The WhatsApp message id. */
+  id: string;
+  fromMe: boolean;
+  /** The sender of a group message that is not from me, as stored (neutral dialect); absent otherwise. */
+  author?: string;
+  /** Epoch seconds. */
+  timestamp: number;
+  /**
+   * The `<lid>@lid` of a 1:1 chat, and of `author`, as the persisted lid mapping holds them. Read from
+   * the table rather than an in-memory cache, which can lack a mapping; absent when none is known.
+   */
+  lid?: string;
+  authorLid?: string;
+}
+
+/**
+ * Reads the newest stored message of the chat a write is for, across the chat's id forms. Engines
+ * call it only when they know no message of the chat themselves, so a lookup costs nothing when it is
+ * not needed; it resolves null when the gateway stored none.
+ */
+export type StoredChatMessageLookup = () => Promise<StoredChatMessage | null>;
+
+/**
  * Chat-list management: enumeration and per-chat flags (seen, unread, archive, pin, mute,
  * clear). These operate on the chat itself; pinning a message INSIDE a chat is
  * MessageOperationsCapability.pinMessage.
+ *
+ * Baileys keys sendSeen, markUnread, archiveChat, clearChatMessages and deleteChat to a message of the
+ * chat, and holds the chat's messages only in memory since its session started. `stored` is the
+ * gateway's fallback for a chat with no message since then; whatsapp-web.js needs none and ignores it.
  */
 export interface ChatCapability {
   getChats(): Promise<ChatSummary[]>;
 
   /**
    * `messageIds` names exactly which messages to acknowledge. Engines that acknowledge per
-   * message (Baileys) need it to mark a burst, or anything at all after a restart; engines with a
-   * chat-level receipt (whatsapp-web.js) ignore it.
+   * message (Baileys) need it to mark a burst; without it they acknowledge the newest received
+   * message they know, else the newest received one `stored` finds. Engines with a chat-level
+   * receipt (whatsapp-web.js) ignore both.
    */
-  sendSeen(chatId: string, messageIds?: string[]): Promise<boolean>;
-
-  markUnread(chatId: string): Promise<boolean>;
-
-  deleteChat(chatId: string): Promise<boolean>;
+  sendSeen(chatId: string, messageIds?: string[], stored?: StoredChatMessageLookup): Promise<boolean>;
 
   /**
-   * Archive or unarchive a chat. Resolves false when the engine cannot act — on Baileys the
-   * archive is an app-state modification keyed to the chat's last message, so a chat with no known
-   * history cannot be archived at all. Same shape as deleteChat/markUnread, which share that limit.
+   * Resolves false when the engine cannot act. On Baileys an archived chat needs a known message to
+   * key the mark to; a chat that is not archived is marked without one if the session knows it.
    */
-  archiveChat(chatId: string, archive: boolean): Promise<boolean>;
+  markUnread(chatId: string, stored?: StoredChatMessageLookup): Promise<boolean>;
+
+  /**
+   * Resolves false when the engine cannot act — on Baileys a chat with no known message at all, since
+   * the delete removes the messages up to the one it is keyed to and guessing that is not safe.
+   */
+  deleteChat(chatId: string, stored?: StoredChatMessageLookup): Promise<boolean>;
+
+  /**
+   * Archive or unarchive a chat. Baileys keys the change to a known message of the chat and sends it
+   * without one when none is known, which WhatsApp applies as well, but only for a chat the session
+   * knows (a chat record, a persisted state row or a stored message); otherwise it resolves false.
+   */
+  archiveChat(chatId: string, archive: boolean, stored?: StoredChatMessageLookup): Promise<boolean>;
 
   /**
    * Pin or unpin a chat at the top of the chat list. Chat-level — distinct from `pinMessage`, which
@@ -1623,18 +1663,18 @@ export interface ChatCapability {
    * Getting this backwards is silent — the send still answers 200 and the mute simply never applies,
    * or lands tens of thousands of years out and reads as permanent.
    *
-   * Unlike archiveChat/clearChatMessages/deleteChat this has no "engine declined" outcome: the
-   * Baileys `mute` app-state modification carries no `lastMessages`, so a chat with no known
-   * history mutes like any other. That is why it resolves void rather than boolean.
+   * Unlike clearChatMessages/deleteChat this has no "engine declined" outcome: the Baileys `mute`
+   * app-state modification carries no `lastMessages`, so a chat with no known history mutes like
+   * any other. That is why it resolves void rather than boolean.
    */
   muteChat(chatId: string, muteUntil: number | null): Promise<void>;
 
   /**
    * Delete every message in a chat while keeping the chat itself in the list. Resolves false when
-   * the engine cannot act — an unknown chat on whatsapp-web.js, or (as with archiveChat) a chat
-   * with no known history on Baileys, whose clear is keyed to the last message.
+   * the engine cannot act — an unknown chat on whatsapp-web.js, or (as with deleteChat) a chat with
+   * no known message at all on Baileys, whose clear is keyed to the last message.
    */
-  clearChatMessages(chatId: string): Promise<boolean>;
+  clearChatMessages(chatId: string, stored?: StoredChatMessageLookup): Promise<boolean>;
 }
 
 /**

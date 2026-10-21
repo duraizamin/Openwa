@@ -986,7 +986,7 @@ Mark a chat as read/seen.
 | `chatId`     | string   | Yes      | `@IsString`; `@IsNotEmpty`; `@MaxLength(255)`; `@Matches(/^[^\s@]+@[^\s@]+$/)` (localpart@host, no whitespace) | Engine-native JID, e.g. `1234567890@c.us` (wwebjs) or `1234@s.whatsapp.net` (Baileys)                                |
 | `messageIds` | string[] | No       | `@IsArray`; `@ArrayNotEmpty`; `@ArrayMaxSize(100)`; each a non-empty token with no whitespace                  | Messages to acknowledge. Omit the field to acknowledge only the newest received message; an empty array is rejected. |
 
-Baileys acknowledges individual messages rather than chats, and the receipt enumerates ids instead of carrying a read-up-to watermark. Without `messageIds` only the newest received message the engine still holds in memory gets a receipt, so a burst leaves its earlier messages unread and a session restarted since the message arrived has nothing to acknowledge at all. Each supplied id is resolved through the message store, which is what carries the `participant` a group receipt needs. Ignored by whatsapp-web.js, whose own `sendSeen` is chat-level.
+Baileys acknowledges individual messages rather than chats, and the receipt enumerates ids instead of carrying a read-up-to watermark. Without `messageIds` only the newest received message gets a receipt: the one the engine holds in memory, else, for a session restarted since it arrived, the newest received message the gateway stored. A burst therefore leaves its earlier messages unread. Each supplied id is resolved through the message store, which is what carries the `participant` a group receipt needs. Ignored by whatsapp-web.js, whose own `sendSeen` is chat-level.
 
 ```json
 { "chatId": "1234567890@c.us", "messageIds": ["3EB0C767D26B8A3F1A2B", "3EB0C767D26B8A3F1A2C"] }
@@ -1001,8 +1001,8 @@ Baileys acknowledges individual messages rather than chats, and the receipt enum
 Returns HTTP `200`, matching the OpenAPI contract.
 
 > **`success: false` is a real outcome on the Baileys engine.** The read receipt is sent against the
-> newest message the chat received, so a chat the session has received no message in (one holding
-> only the account's own sends included) is reported as declined rather than marked read. The
+> newest message the chat received, in memory or stored, so a chat with neither (one holding only
+> the account's own sends included) is reported as declined rather than marked read. The
 > whatsapp-web.js engine reads the chat from the page and needs no local history, but it still
 > answers `success: false` for a chat the page cannot find or when the page declines the read.
 
@@ -1027,6 +1027,8 @@ Mark a chat as unread.
 | `chatId` | string | Yes      | `@IsString`; `@IsNotEmpty`; `@MaxLength(255)`; `@Matches(/^[^\s@]+@[^\s@]+$/)` | Engine-native JID, e.g. `1234567890@c.us` |
 
 This route takes `chatId` alone. It previously shared `MarkChatReadDto`, which is why the two are described separately now that the read body carries `messageIds`.
+
+On Baileys the mark is keyed to the chat's newest message: the one held in memory, else the newest one the gateway stored. With neither it is sent without one, which WhatsApp applies to a chat in the list. The route answers `success: false` instead for an archived chat, which the phone leaves unmarked without one, and for an id the session knows no chat for.
 
 ```json
 { "chatId": "1234567890@c.us" }
@@ -1063,9 +1065,9 @@ Delete every message in a chat, keeping the chat itself in the list.
 
 On success the gateway also removes its stored copies of the chat's messages (rows, inline and archived media, search entries) and emits `message:deleted` for each. Changes made on the phone are not mirrored.
 
-> **`success: false` is a real outcome**, as with `chats/archive`: an unknown chat on
-> whatsapp-web.js, or on Baileys a chat with no known history — the clear is an app-state
-> modification keyed to the chat's last message.
+> **`success: false` is a real outcome**: an unknown chat on whatsapp-web.js, or on Baileys a chat
+> with no message in memory or stored — the clear is an app-state modification keyed to the chat's
+> last message, and the gateway never guesses one.
 
 **Errors:** `400` session not ready · `401` missing/invalid API key · `404` session not found · `409` the session is not connected (engine exists but is not `ready`) · `503` WhatsApp did not answer within the request budget, or the engine’s browser page died — the change may or may not have been applied
 
@@ -1098,10 +1100,12 @@ Archive or unarchive a chat.
 { "success": true }
 ```
 
-> **`success: false` is a real outcome here, not an error.** On the Baileys engine the archive is an
-> app-state modification keyed to the chat's **last message**, so a chat with no known history
-> cannot be archived at all — the same limitation `chats/delete` and `chats/unread` already carry on
-> that engine. Rather than fail with a 500, the endpoint reports `success: false`.
+> On the Baileys engine the archive is an app-state modification keyed to the chat's **last
+> message**: the one held in memory, else the newest one the gateway stored. A chat with neither,
+> one that had no traffic since the session started and none stored, is archived without one, which
+> WhatsApp applies as well. An id the session knows no chat for (no chat record, persisted state or
+> stored message) answers `success: false`: Baileys replays its own change locally, so archiving it
+> would list a chat the account does not have.
 
 > **No `chat.archived` webhook fires for your own archive.** Baileys emits no event for a change the
 > account itself made (remote-device archives arrive later via chat-update diffing), and
@@ -1233,6 +1237,9 @@ Delete a chat from the chat list (e.g. a group you have left).
 Returns HTTP `200`, matching the OpenAPI contract.
 
 On success the gateway also removes its stored copies of the chat's messages (rows, inline and archived media, search entries) and emits `message:deleted` for each. Changes made on the phone are not mirrored.
+
+> **`success: false` is a real outcome**, as with the clear: on Baileys the delete is keyed to the
+> chat's last message, in memory or stored, and a chat with neither is not deleted.
 
 **Errors:** `400` validation, or session not started · `401` · `403` · `404` session not found · `409` the session is not connected (engine exists but is not `ready`) · `503` WhatsApp did not answer within the request budget, or the engine’s browser page died — the change may or may not have been applied
 

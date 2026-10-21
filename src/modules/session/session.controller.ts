@@ -603,10 +603,10 @@ export class SessionController {
     status: 200,
     description:
       'Returns `{ success }`. `false` means the engine declined to act: the Baileys engine sends the ' +
-      'read receipt against the newest message the chat received, so a chat it has received no ' +
-      "message in (one holding only the account's own sends included) is reported as declined " +
-      'rather than marked read. The whatsapp-web.js engine reads the chat from the page and needs no ' +
-      'local history.',
+      'read receipt against the newest message the chat received that it holds in memory, else the ' +
+      'newest received one the gateway stored, so a chat with neither (one holding only the ' +
+      "account's own sends included) is reported as declined rather than marked read. The " +
+      'whatsapp-web.js engine reads the chat from the page and needs no local history.',
     type: SessionActionResponseDto,
   })
   @ApiResponse({ status: 400, description: 'Session not ready' })
@@ -780,7 +780,8 @@ export class SessionController {
     status: 200,
     description:
       'Returns `{ success }`. `false` means the engine declined to act — an unknown chat, or on the ' +
-      'Baileys engine a chat with no known history, since the change is keyed to its last message.',
+      'Baileys engine a chat with no message in memory or stored, since the clear is keyed to its ' +
+      'last message.',
     type: SessionActionResponseDto,
   })
   @ApiResponse({ status: 400, description: 'Session not ready' })
@@ -809,8 +810,10 @@ export class SessionController {
   @ApiResponse({
     status: 200,
     description:
-      'Returns `{ success }`. `false` means the engine declined to act — on the Baileys engine a ' +
-      'chat with no known history cannot be archived, since the change is keyed to its last message.',
+      'Returns `{ success }`. `false` means the engine declined to act. The Baileys engine keys the ' +
+      "change to the chat's newest message in memory, else the newest stored one, else sends it " +
+      'without one, which WhatsApp applies as well, for a chat the session knows; an id it knows no ' +
+      'chat for answers `false`.',
     type: SessionActionResponseDto,
   })
   @ApiResponse({ status: 400, description: 'Session not ready' })

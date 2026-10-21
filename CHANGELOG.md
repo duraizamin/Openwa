@@ -80,6 +80,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Create the built-in PostgreSQL container with the saved `DATABASE_PASSWORD`, so a custom password saved with the built-in database no longer fails the next boot.
 - Serialize a plugin upload with an uninstall or update of the same plugin id.
 - Show hours for a session active within the last day on the Sessions page, as the Dashboard does.
+- Index Baileys clear, delete, archive and unread changes by the same chat jid as their message key, and send an own group message's key without its participant, so the phone applies a clear or delete instead of ignoring it (#1891). Thanks @rjsebening.
+- Key Baileys chat writes and read receipts to the gateway's stored newest message of a chat with no message since the session started, and archive or mark unread a known chat with no message at all, while an unknown id still answers `false`; clear and delete still decline then (#1891). Thanks @rjsebening.
 - List a whatsapp-web.js contact held under both its LID and its phone once in the contacts and blocked lists, with the phone as `number`, instead of twice with the LID's digits.
 
 ## [0.25.0] - 2026-10-15
