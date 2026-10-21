@@ -208,6 +208,9 @@
       "read": "Leído",
       "failed": "Fallido"
     },
+    "today": "Hoy",
+    "switchSession": "Cambiar sesión",
+    "searchMessages": "Buscar mensajes",
     "clearSearch": "Borrar búsqueda",
     "filters": {
       "label": "Filtrar chats",
@@ -218,11 +221,13 @@
       "unknown": "Desconocidos"
     },
     "noFilterResults": "Ningún chat coincide con este filtro",
+    "contactInfo": "Info. del contacto",
     "moreActions": "Más acciones",
     "copyChatId": "Copiar ID del chat",
     "chatIdCopied": "ID del chat copiado",
     "copyFailed": "No se pudo copiar al portapapeles",
     "closeChat": "Cerrar chat",
+    "phone": "Número de teléfono",
     "chatId": "ID del chat",
     "newChat": {
       "title": "Nuevo chat",
@@ -247,6 +252,12 @@
       "created": "Grupo «{{name}}» creado",
       "createFailed": "No se pudo crear el grupo",
       "removeParticipant": "Quitar a {{name}}"
+    },
+    "sessionPicker": {
+      "searchPlaceholder": "Buscar sesiones...",
+      "noMatch": "Ninguna sesión coincide",
+      "addTitle": "Vincular otro número",
+      "addHint": "Crea una sesión y vincúlala con un código QR"
     },
     "group": {
       "info": "Info. del grupo",

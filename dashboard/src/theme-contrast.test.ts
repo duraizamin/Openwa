@@ -42,3 +42,38 @@ test('dark --error-text clears AA on every error tint it lands on, in both dark 
     }
   }
 });
+
+// The chat page's own palette (pages/Chats.css): every text token against every surface it lands on, in the
+// light set and both dark sets. Light --chat-panel is the app's white card, so it resolves through App.css.
+const CHATS_CSS = readFileSync(join(dirname(fileURLToPath(import.meta.url)), 'pages', 'Chats.css'), 'utf8');
+const chatBlock = (anchor: string): string => {
+  const from = CHATS_CSS.indexOf(anchor);
+  assert.notEqual(from, -1, `Chats.css no longer contains "${anchor}"`);
+  return CHATS_CSS.slice(from, CHATS_CSS.indexOf('}', from));
+};
+const chatToken = (block: string, name: string): string =>
+  block.match(new RegExp(`${name}:\\s*var\\(--bg-white\\)`))
+    ? token(blockAfter(':root {'), '--bg-white')
+    : token(block, name);
+
+const CHAT_TEXT_ON: Array<[string, string[]]> = [
+  ['--chat-meta', ['--chat-panel', '--chat-hover', '--chat-active', '--chat-bubble-in']],
+  ['--chat-accent-text', ['--chat-panel', '--chat-hover', '--chat-active']],
+  ['--chat-meta-out', ['--chat-bubble-out']],
+];
+
+for (const anchor of [
+  '.chats-page {',
+  "[data-theme='dark'] .chats-page {",
+  ":root:not([data-theme='light']) .chats-page {",
+]) {
+  test(`chat text clears AA on every surface it lands on (${anchor})`, () => {
+    const block = chatBlock(anchor);
+    for (const [text, surfaces] of CHAT_TEXT_ON) {
+      for (const surface of surfaces) {
+        const ratio = contrast(rgb(chatToken(block, text)), rgb(chatToken(block, surface)));
+        assert.ok(ratio >= 4.5, `${anchor} ${text} is ${ratio.toFixed(2)}:1 on ${surface}`);
+      }
+    }
+  });
+}

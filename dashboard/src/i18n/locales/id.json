@@ -203,6 +203,9 @@
       "read": "Dibaca",
       "failed": "Gagal"
     },
+    "today": "Hari ini",
+    "switchSession": "Ganti sesi",
+    "searchMessages": "Cari pesan",
     "clearSearch": "Hapus pencarian",
     "filters": {
       "label": "Filter obrolan",
@@ -213,11 +216,13 @@
       "unknown": "Tidak dikenal"
     },
     "noFilterResults": "Tidak ada obrolan yang cocok dengan filter ini",
+    "contactInfo": "Info kontak",
     "moreActions": "Tindakan lainnya",
     "copyChatId": "Salin ID obrolan",
     "chatIdCopied": "ID obrolan disalin",
     "copyFailed": "Tidak dapat menyalin ke papan klip",
     "closeChat": "Tutup obrolan",
+    "phone": "Nomor telepon",
     "chatId": "ID obrolan",
     "newChat": {
       "title": "Obrolan baru",
@@ -242,6 +247,12 @@
       "created": "Grup \"{{name}}\" dibuat",
       "createFailed": "Tidak dapat membuat grup",
       "removeParticipant": "Hapus {{name}}"
+    },
+    "sessionPicker": {
+      "searchPlaceholder": "Cari sesi...",
+      "noMatch": "Tidak ada sesi yang cocok",
+      "addTitle": "Tautkan nomor lain",
+      "addHint": "Buat sesi dan tautkan dengan kode QR"
     },
     "group": {
       "info": "Info grup",

@@ -280,7 +280,13 @@ function GroupInfoDialog({ session, group, onClose, onRenamed }: GroupInfoDialog
                   <img src={newPicture.preview} alt="" />
                 </span>
               ) : (
-                <ChatAvatar pictureUrl={picture.data} kind="group" size="lg" onImageError={() => picture.refetch()} />
+                <ChatAvatar
+                  chatId={group.id}
+                  pictureUrl={picture.data}
+                  kind="group"
+                  size="lg"
+                  onImageError={() => picture.refetch()}
+                />
               )}
               <span>{canEditInfo ? t('chats.group.pictureHint') : t('chats.group.readOnlyHint')}</span>
             </button>
@@ -345,7 +351,7 @@ function GroupInfoDialog({ session, group, onClose, onRenamed }: GroupInfoDialog
               const label = own ? t('chats.you') : p.name || formatPhoneForDisplay(p.number) || p.number;
               return (
                 <li key={p.id}>
-                  <ChatAvatar kind="individual" />
+                  <ChatAvatar chatId={p.id} kind="individual" size="sm" />
                   <span className="group-info-member">
                     <bdi className="name">{label}</bdi>
                     {p.name && (

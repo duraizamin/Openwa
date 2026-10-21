@@ -203,6 +203,9 @@
       "read": "पढ़ा गया",
       "failed": "विफल"
     },
+    "today": "आज",
+    "switchSession": "सत्र बदलें",
+    "searchMessages": "संदेश खोजें",
     "clearSearch": "खोज साफ़ करें",
     "filters": {
       "label": "चैट फ़िल्टर करें",
@@ -213,11 +216,13 @@
       "unknown": "अज्ञात"
     },
     "noFilterResults": "इस फ़िल्टर से कोई चैट मेल नहीं खाता",
+    "contactInfo": "संपर्क जानकारी",
     "moreActions": "और विकल्प",
     "copyChatId": "चैट आईडी कॉपी करें",
     "chatIdCopied": "चैट आईडी कॉपी हो गई",
     "copyFailed": "क्लिपबोर्ड पर कॉपी नहीं हो सका",
     "closeChat": "चैट बंद करें",
+    "phone": "फ़ोन नंबर",
     "chatId": "चैट आईडी",
     "newChat": {
       "title": "नई चैट",
@@ -242,6 +247,12 @@
       "created": "समूह \"{{name}}\" बनाया गया",
       "createFailed": "समूह नहीं बनाया जा सका",
       "removeParticipant": "{{name}} हटाएँ"
+    },
+    "sessionPicker": {
+      "searchPlaceholder": "सत्र खोजें...",
+      "noMatch": "कोई सत्र मेल नहीं खाता",
+      "addTitle": "एक और नंबर जोड़ें",
+      "addHint": "सत्र बनाएँ और QR कोड से लिंक करें"
     },
     "group": {
       "info": "समूह जानकारी",

@@ -224,6 +224,9 @@
       "read": "تمت القراءة",
       "failed": "فشل"
     },
+    "today": "اليوم",
+    "switchSession": "تبديل الجلسة",
+    "searchMessages": "البحث في الرسائل",
     "clearSearch": "مسح البحث",
     "filters": {
       "label": "تصفية المحادثات",
@@ -234,11 +237,13 @@
       "unknown": "غير معروف"
     },
     "noFilterResults": "لا توجد محادثات مطابقة لهذا الفلتر",
+    "contactInfo": "معلومات جهة الاتصال",
     "moreActions": "إجراءات إضافية",
     "copyChatId": "نسخ معرّف المحادثة",
     "chatIdCopied": "تم نسخ معرّف المحادثة",
     "copyFailed": "تعذّر النسخ إلى الحافظة",
     "closeChat": "إغلاق المحادثة",
+    "phone": "رقم الهاتف",
     "chatId": "معرّف المحادثة",
     "newChat": {
       "title": "محادثة جديدة",
@@ -263,6 +268,12 @@
       "created": "تم إنشاء المجموعة \"{{name}}\"",
       "createFailed": "تعذّر إنشاء المجموعة",
       "removeParticipant": "إزالة {{name}}"
+    },
+    "sessionPicker": {
+      "searchPlaceholder": "ابحث في الجلسات...",
+      "noMatch": "لا توجد جلسة مطابقة",
+      "addTitle": "ربط رقم آخر",
+      "addHint": "أنشئ جلسة واربطها برمز QR"
     },
     "group": {
       "info": "معلومات المجموعة",

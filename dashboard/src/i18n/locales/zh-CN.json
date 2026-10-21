@@ -203,6 +203,9 @@
       "read": "已读",
       "failed": "发送失败"
     },
+    "today": "今天",
+    "switchSession": "切换会话",
+    "searchMessages": "搜索消息",
     "clearSearch": "清除搜索",
     "filters": {
       "label": "筛选聊天",
@@ -213,11 +216,13 @@
       "unknown": "未知"
     },
     "noFilterResults": "没有符合此筛选条件的聊天",
+    "contactInfo": "联系人信息",
     "moreActions": "更多操作",
     "copyChatId": "复制聊天 ID",
     "chatIdCopied": "已复制聊天 ID",
     "copyFailed": "无法复制到剪贴板",
     "closeChat": "关闭聊天",
+    "phone": "电话号码",
     "chatId": "聊天 ID",
     "newChat": {
       "title": "新聊天",
@@ -242,6 +247,12 @@
       "created": "已创建群组“{{name}}”",
       "createFailed": "无法创建群组",
       "removeParticipant": "移除 {{name}}"
+    },
+    "sessionPicker": {
+      "searchPlaceholder": "搜索会话...",
+      "noMatch": "没有匹配的会话",
+      "addTitle": "关联其他号码",
+      "addHint": "创建会话并通过二维码关联"
     },
     "group": {
       "info": "群组信息",

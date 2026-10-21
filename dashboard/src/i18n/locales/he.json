@@ -214,6 +214,9 @@
       "read": "נקרא",
       "failed": "נכשל"
     },
+    "today": "היום",
+    "switchSession": "החלפת סשן",
+    "searchMessages": "חיפוש הודעות",
     "clearSearch": "ניקוי החיפוש",
     "filters": {
       "label": "סינון שיחות",
@@ -224,11 +227,13 @@
       "unknown": "לא מוכרים"
     },
     "noFilterResults": "אין צ׳אטים שתואמים למסנן זה",
+    "contactInfo": "פרטי איש קשר",
     "moreActions": "פעולות נוספות",
     "copyChatId": "העתקת מזהה הצ׳אט",
     "chatIdCopied": "מזהה הצ׳אט הועתק",
     "copyFailed": "ההעתקה ללוח נכשלה",
     "closeChat": "סגירת הצ׳אט",
+    "phone": "מספר טלפון",
     "chatId": "מזהה צ׳אט",
     "newChat": {
       "title": "צ׳אט חדש",
@@ -253,6 +258,12 @@
       "created": "הקבוצה \"{{name}}\" נוצרה",
       "createFailed": "לא ניתן ליצור את הקבוצה",
       "removeParticipant": "הסרת {{name}}"
+    },
+    "sessionPicker": {
+      "searchPlaceholder": "חיפוש סשנים...",
+      "noMatch": "אין סשן תואם",
+      "addTitle": "קישור מספר נוסף",
+      "addHint": "יצירת סשן וקישורו באמצעות קוד QR"
     },
     "group": {
       "info": "פרטי הקבוצה",

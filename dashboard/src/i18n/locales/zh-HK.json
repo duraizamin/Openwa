@@ -203,6 +203,9 @@
       "read": "已讀",
       "failed": "傳送失敗"
     },
+    "today": "今天",
+    "switchSession": "切換工作階段",
+    "searchMessages": "搜尋訊息",
     "clearSearch": "清除搜尋",
     "filters": {
       "label": "篩選聊天",
@@ -213,11 +216,13 @@
       "unknown": "未知"
     },
     "noFilterResults": "沒有符合此篩選條件的聊天",
+    "contactInfo": "聯絡人資料",
     "moreActions": "更多操作",
     "copyChatId": "複製聊天 ID",
     "chatIdCopied": "已複製聊天 ID",
     "copyFailed": "無法複製到剪貼簿",
     "closeChat": "關閉聊天",
+    "phone": "電話號碼",
     "chatId": "聊天 ID",
     "newChat": {
       "title": "新聊天",
@@ -242,6 +247,12 @@
       "created": "已建立群組「{{name}}」",
       "createFailed": "無法建立群組",
       "removeParticipant": "移除 {{name}}"
+    },
+    "sessionPicker": {
+      "searchPlaceholder": "搜尋工作階段...",
+      "noMatch": "沒有相符的工作階段",
+      "addTitle": "連結其他號碼",
+      "addHint": "建立工作階段並以 QR 碼連結"
     },
     "group": {
       "info": "群組資訊",

@@ -203,6 +203,9 @@
       "read": "읽음",
       "failed": "실패"
     },
+    "today": "오늘",
+    "switchSession": "세션 전환",
+    "searchMessages": "메시지 검색",
     "clearSearch": "검색 지우기",
     "filters": {
       "label": "채팅 필터",
@@ -213,11 +216,13 @@
       "unknown": "알 수 없음"
     },
     "noFilterResults": "이 필터와 일치하는 채팅이 없습니다",
+    "contactInfo": "연락처 정보",
     "moreActions": "추가 작업",
     "copyChatId": "채팅 ID 복사",
     "chatIdCopied": "채팅 ID가 복사되었습니다",
     "copyFailed": "클립보드에 복사할 수 없습니다",
     "closeChat": "채팅 닫기",
+    "phone": "전화번호",
     "chatId": "채팅 ID",
     "newChat": {
       "title": "새 채팅",
@@ -242,6 +247,12 @@
       "created": "\"{{name}}\" 그룹이 생성되었습니다",
       "createFailed": "그룹을 만들 수 없습니다",
       "removeParticipant": "{{name}} 제거"
+    },
+    "sessionPicker": {
+      "searchPlaceholder": "세션 검색...",
+      "noMatch": "일치하는 세션이 없습니다",
+      "addTitle": "다른 번호 연결",
+      "addHint": "세션을 만들고 QR 코드로 연결하세요"
     },
     "group": {
       "info": "그룹 정보",

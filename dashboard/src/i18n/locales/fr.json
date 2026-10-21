@@ -208,6 +208,9 @@
       "read": "Lu",
       "failed": "Échec"
     },
+    "today": "Aujourd'hui",
+    "switchSession": "Changer de session",
+    "searchMessages": "Rechercher des messages",
     "clearSearch": "Effacer la recherche",
     "filters": {
       "label": "Filtrer les discussions",
@@ -218,11 +221,13 @@
       "unknown": "Inconnus"
     },
     "noFilterResults": "Aucune discussion ne correspond à ce filtre",
+    "contactInfo": "Infos du contact",
     "moreActions": "Plus d’actions",
     "copyChatId": "Copier l’ID de la discussion",
     "chatIdCopied": "ID de la discussion copié",
     "copyFailed": "Impossible de copier dans le presse-papiers",
     "closeChat": "Fermer la discussion",
+    "phone": "Numéro de téléphone",
     "chatId": "ID de la discussion",
     "newChat": {
       "title": "Nouvelle discussion",
@@ -247,6 +252,12 @@
       "created": "Groupe « {{name}} » créé",
       "createFailed": "Impossible de créer le groupe",
       "removeParticipant": "Retirer {{name}}"
+    },
+    "sessionPicker": {
+      "searchPlaceholder": "Rechercher des sessions...",
+      "noMatch": "Aucune session ne correspond",
+      "addTitle": "Associer un autre numéro",
+      "addHint": "Créez une session et associez-la avec un code QR"
     },
     "group": {
       "info": "Infos du groupe",

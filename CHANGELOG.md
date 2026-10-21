@@ -19,6 +19,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add chat and contact menus to the dashboard Chats page: pin, mute, archive, mark unread, save, rename and block a contact, leave a group, and clear or delete a chat on whatsapp-web.js only until #1891 is fixed. Thanks @rjsebening.
 - Add an Archived view to the dashboard chat list. Thanks @rjsebening.
 - Add a group info dialog to the dashboard Chats page that edits a group and manages its participants. Thanks @rjsebening.
+- Add a session switcher to the dashboard Chats page that lists every session with its state, picture, push name and number, and lets only a ready one be selected.
+- Add a contact info panel to the dashboard chat room with the contact's picture, name, number and copyable chat id.
+- Add Today, Yesterday and date separators to the dashboard chat thread.
 
 ### Changed
 
@@ -35,6 +38,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Remove a stored plugin secret when a config write sends `null` for it; an empty string still keeps it.
 - Send `null` for a cleared secret field in the plugin config form of the dashboard, which removes the stored secret.
 - Reuse the participant list of a Baileys group for up to 5 minutes (`BAILEYS_GROUP_METADATA_CACHE_TTL_MS`, `0` queries for every send) instead of querying it for every group message.
+- Redesign the dashboard Chats page in a WhatsApp Web style, full height without the page header, with its own light and dark palette, a patterned wallpaper behind the thread, coloured avatars, tailed bubbles and a single-pill composer; every existing chat feature stays.
+- Show the dashboard Chats page's message search behind a toggle in the chat list header, still hidden for read-only keys.
+- Show the raw chat id of a dashboard chat in its contact info panel instead of the room header.
+- Show a dashboard chat message's time and delivery ticks inside its last line of text, with the delivery status still named for screen readers.
+- Show dashboard chat list times as the clock today, Yesterday, the weekday within the last week and a short date before that.
+- Move the dashboard sidebar's collapse button from the sidebar edge into its header, beside the logo or under it when collapsed, with a panel icon mirrored for right-to-left languages.
 
 ### Fixed
 

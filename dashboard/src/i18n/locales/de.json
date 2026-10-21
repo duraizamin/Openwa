@@ -203,6 +203,9 @@
       "read": "Gelesen",
       "failed": "Fehlgeschlagen"
     },
+    "today": "Heute",
+    "switchSession": "Sitzung wechseln",
+    "searchMessages": "Nachrichten durchsuchen",
     "clearSearch": "Suche leeren",
     "filters": {
       "label": "Chats filtern",
@@ -213,11 +216,13 @@
       "unknown": "Unbekannt"
     },
     "noFilterResults": "Keine Chats für diesen Filter",
+    "contactInfo": "Kontaktinfo",
     "moreActions": "Weitere Aktionen",
     "copyChatId": "Chat-ID kopieren",
     "chatIdCopied": "Chat-ID kopiert",
     "copyFailed": "Kopieren in die Zwischenablage fehlgeschlagen",
     "closeChat": "Chat schließen",
+    "phone": "Telefonnummer",
     "chatId": "Chat-ID",
     "newChat": {
       "title": "Neuer Chat",
@@ -242,6 +247,12 @@
       "created": "Gruppe „{{name}}“ erstellt",
       "createFailed": "Gruppe konnte nicht erstellt werden",
       "removeParticipant": "{{name}} entfernen"
+    },
+    "sessionPicker": {
+      "searchPlaceholder": "Sitzung suchen...",
+      "noMatch": "Keine passende Sitzung",
+      "addTitle": "Weitere Nummer koppeln",
+      "addHint": "Sitzung anlegen und per QR-Code verbinden"
     },
     "group": {
       "info": "Gruppeninfo",

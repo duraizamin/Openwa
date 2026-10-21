@@ -329,7 +329,7 @@ function NewChatPanel({ sessionId, onOpenChat, onClose }: NewChatPanelProps) {
                     : onOpenChat(draftChat(c.id, c.name || '', 'individual'), sessionId)
                 }
               >
-                <ChatAvatar kind="individual" />
+                <ChatAvatar chatId={c.id} kind="individual" />
                 <span className="chat-item-info">
                   <span className="chat-item-name">{label}</span>
                   {phone && phone !== label && (
