@@ -427,6 +427,12 @@ describe('validateEnv', () => {
     expect(() => validateEnv({})).not.toThrow();
   });
 
+  it('rejects a SEARCH_CONTAINS_ENABLED typo instead of silently leaving contains search off', () => {
+    expect(() => validateEnv({ SEARCH_CONTAINS_ENABLED: 'yes' })).toThrow(/SEARCH_CONTAINS_ENABLED/);
+    expect(() => validateEnv({ SEARCH_CONTAINS_ENABLED: 'true' })).not.toThrow();
+    expect(() => validateEnv({ SEARCH_CONTAINS_ENABLED: '' })).not.toThrow();
+  });
+
   it('rejects a LOG_LEVEL misspelling instead of silently logging at info', () => {
     // Plausible spellings from neighbouring vocabularies that this repo's LogLevel does not carry;
     // every one of them silently meant INFO before this check existed.

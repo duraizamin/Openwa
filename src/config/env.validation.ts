@@ -597,6 +597,7 @@ export function validateEnv(config: EnvConfig): EnvConfig {
     'RESOLVE_LID_TO_PHONE',
     'SIMULATE_TYPING',
     'SEARCH_ENABLED',
+    'SEARCH_CONTAINS_ENABLED',
     // Read at boot by the throttler factory (app.module.ts) and CacheService with `=== 'true'`: a
     // typo like `ture` silently downgrades rate-limit storage + cache to per-process in-memory.
     'REDIS_ENABLED',

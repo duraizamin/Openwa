@@ -6,7 +6,7 @@ import { ChatScopeService } from '../auth/chat-scope.service';
 import { ApiKey, ApiKeyRole } from '../auth/entities/api-key.entity';
 import { SearchService } from './search.service';
 import { SearchQueryDto } from './dto/search-query.dto';
-import { SEARCH_OFFSET_MAX } from './search.constants';
+import { SEARCH_CONTAINS_WINDOW, SEARCH_MATCH_MODES, SEARCH_OFFSET_MAX } from './search.constants';
 import type { SearchResults } from './search.types';
 
 @ApiTags('search')
@@ -24,10 +24,18 @@ export class SearchController {
   @ApiResponse({ status: 200, description: 'Search results from the active provider', type: SearchResultsResponseDto })
   @ApiResponse({
     status: 400,
-    description: 'Empty or whitespace-only "q", or one over 1000 characters or 32 words',
+    description:
+      'Empty or whitespace-only "q", or one over 1000 characters or 32 words; an unknown "match"; or a ' +
+      '"match=contains" query with no term of 3 or more characters (on PostgreSQL, 3 letters or digits in a row)',
   })
   @ApiResponse({ status: 403, description: 'Chat scope denied or chat-restricted search uses a plugin provider' })
-  @ApiResponse({ status: 501, description: 'No search provider configured' })
+  @ApiResponse({
+    status: 501,
+    description:
+      'No search provider configured, or the built-in provider lacks the index the requested match mode needs ' +
+      '(for "match=contains": SEARCH_CONTAINS_ENABLED=true and a finished index build, and on PostgreSQL the ' +
+      'pg_trgm and unaccent extensions)',
+  })
   @ApiResponse({
     status: 502,
     description:
@@ -44,6 +52,14 @@ export class SearchController {
     name: 'q',
     required: true,
     description: 'Search term (required, non-empty, at most 1000 characters and 32 words)',
+  })
+  @ApiQuery({
+    name: 'match',
+    required: false,
+    enum: SEARCH_MATCH_MODES,
+    description:
+      'word (default): whole words. contains: any part of a word, ignoring case and accents; ranks the ' +
+      `${SEARCH_CONTAINS_WINDOW} most recently stored matches by match quality; needs SEARCH_CONTAINS_ENABLED=true`,
   })
   @ApiQuery({ name: 'sessionId', required: false, description: 'Restrict to a single session' })
   @ApiQuery({

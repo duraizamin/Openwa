@@ -55,8 +55,10 @@ client = OpenWAClient(base_url="…", api_key="…", transport=httpx.MockTranspo
 ## Search
 
 `GET /search` is wrapped as `client.search.search(params)`. Only `q` is required;
-the rest (`sessionId`, `chatId`, `direction`, `type`, `from`, `dateFrom`,
+the rest (`match`, `sessionId`, `chatId`, `direction`, `type`, `from`, `dateFrom`,
 `dateTo`, `limit`, `offset`) are optional. `dateFrom` / `dateTo` are epoch-ms.
+`match` is `word` (the default) or `contains`, which the server answers with 501
+unless it sets `SEARCH_CONTAINS_ENABLED=true`.
 The active search provider (built-in DB full-text, or a plugin) answers; if none
 is configured the server returns 501.
 

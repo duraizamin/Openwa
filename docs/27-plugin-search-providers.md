@@ -48,7 +48,7 @@ returns a `SearchResults`:
 
 ```ts
 ctx.registerSearchProvider(async (query) => {
-  // query: SearchQuery, { q, sessionIds?, sessionId?, chatId?, direction?, type?, from?, dateFrom?, dateTo?, limit?, offset? }
+  // query: SearchQuery, { q, match?, sessionIds?, sessionId?, chatId?, direction?, type?, from?, dateFrom?, dateTo?, limit?, offset? }
   // Run your backend's query here (e.g. a Meilisearch /search call).
   return {
     hits: [...],   // SearchHit[] — see below
@@ -58,6 +58,10 @@ ctx.registerSearchProvider(async (query) => {
   };
 });
 ```
+
+`match` is `'word'` (also when absent) or `'contains'` (any part of a word, ignoring case and accents);
+treat it as your backend allows. `SEARCH_CONTAINS_ENABLED` only gates the built-in provider's trigram
+index, so a plugin receives `contains` whatever that setting says.
 
 A plugin may register **one** search handler (calling `registerSearchProvider` again replaces it; the
 host is notified once). If `onEnable` throws after registering, the host cleans up (the provider is

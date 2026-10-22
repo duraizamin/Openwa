@@ -883,6 +883,18 @@ with `CREATE INDEX CONCURRENTLY IF NOT EXISTS` under the same name and columns, 
 it. A concurrent build that fails leaves an INVALID index under that name, which the migration also
 skips: check `pg_index.indisvalid` and drop the invalid index before building it again.
 
+> [!NOTE]
+> **Enabling `match=contains`.** `SEARCH_CONTAINS_ENABLED=true` (off by default) makes `GET /api/search`
+> and the `MessageSearch` MCP tool accept `match=contains`. No migration builds its index: the search
+> provider does, only once the HTTP listener is up, so the build never keeps a pod from its startup probe.
+> On SQLite it adds the `messages_trgm` trigram table, about three times the message text (289 MB and a
+> 9.4 s backfill on a synthetic million messages), backfilled in batches that yield to the event loop.
+> On PostgreSQL it creates the `pg_trgm` and `unaccent` extensions when the role may, and builds the
+> `idx_messages_body_trgm` GIN index with `CREATE INDEX CONCURRENTLY`, so writes go on (76 MB on 300,000
+> messages, next to 30 MB for the word index); one replica builds while the others wait. `match=contains`
+> answers `501` until the index is ready. Turning the setting off later keeps the index and its upkeep;
+> [26.9](./26-global-search.md#269-enabling-matchcontains) lists the statements that drop it.
+
 ### Known Upgrade Hazards
 
 | Release  | Change                                                                                                                                                                                                                                                                                                                         | Action                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |

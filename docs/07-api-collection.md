@@ -1739,7 +1739,8 @@ cannot be widened via the query. See doc 26 for the provider contract.
 Search messages across sessions. `q` is required (non-empty after trim); optional filters are
 `sessionId`, `chatId`, `direction` (`incoming` | `outgoing`), `type`, `from`, `dateFrom`/`dateTo`
 (epoch ms), plus `limit` (default 50, clamped to `SEARCH_LIMIT_MAX` = 100) and `offset` (at most
-100000). `q` is at most 1000 characters and 32 words, and a longer one answers `400`. A key restricted to
+100000). `match` is `word` (the default, whole words) or `contains` (any part of a word, ignoring case
+and accents), which answers `501` unless the server sets `SEARCH_CONTAINS_ENABLED=true`. `q` is at most 1000 characters and 32 words, and a longer one answers `400`. A key restricted to
 selected chats gets `403` for a `chatId` outside its list and for a plugin search provider. Hit
 `snippet` fields carry `<mark>` highlight markers — render them as text, never as HTML.
 
