@@ -15,7 +15,7 @@
 # security-scan.yml fails once the pin differs from what the tag serves and either the tag has
 # served that image for 7 or more days, or for 3 or more days with the pin last changed 28 or more
 # days ago. Update both stages together.
-FROM --platform=$BUILDPLATFORM docker.io/node:22-slim@sha256:c3de60bf2f9dd0ac6370e6117950ff62d6e339527e7472301c9c78a017978392 AS builder
+FROM --platform=$BUILDPLATFORM docker.io/node:22-slim@sha256:de170b39439eb0e5a3444ad7d60b015614a381e10fecae2e30ec9e735122f38d AS builder
 
 WORKDIR /app
 
@@ -63,7 +63,7 @@ RUN npm run build && npm run dashboard:ci -- --include=dev && npm run dashboard:
 
 # ===== Stage 2: Production =====
 # Same digest-pinned node:22-slim base as the builder stage.
-FROM docker.io/node:22-slim@sha256:c3de60bf2f9dd0ac6370e6117950ff62d6e339527e7472301c9c78a017978392 AS production
+FROM docker.io/node:22-slim@sha256:de170b39439eb0e5a3444ad7d60b015614a381e10fecae2e30ec9e735122f38d AS production
 
 # Run the app with production defaults from the first boot: an unset NODE_ENV selects the
 # development branch of the CORS/Swagger/DTO-error-detail/default-secret hardening (main.ts
@@ -233,7 +233,7 @@ RUN npm ci --omit=dev --ignore-scripts \
 # Deliberately AFTER `npm ci`, so the application tree is still resolved by the npm the lockfile
 # was generated with and only the global CLI is swapped. Pinned to the exact patch release —
 # a floating npm@12 would make the image's bundled npm tree depend on when the build happened.
-RUN npm install -g npm@12.1.0 && npm cache clean --force
+RUN npm install -g npm@12.2.1 && npm cache clean --force
 
 # amd64: download Chrome for Testing via Puppeteer and symlink it.
 # arm64: use Debian's chromium installed above (a choice; see the note at that install).
@@ -254,7 +254,7 @@ RUN if [ "$TARGETARCH" = arm64 ]; then \
         ln -s /usr/bin/chromium /usr/local/bin/puppeteer-chrome; \
     else \
         mkdir -p /opt/puppeteer && \
-        PUPPETEER_CACHE_DIR=/opt/puppeteer ./node_modules/.bin/puppeteer browsers install 'chrome@153.0.8010.36' && \
+        PUPPETEER_CACHE_DIR=/opt/puppeteer ./node_modules/.bin/puppeteer browsers install 'chrome@156.0.8078.47' && \
         chown -R openwa:openwa /opt/puppeteer && \
         chrome_path=$(find /opt/puppeteer/chrome/linux*/chrome-linux64/chrome | head -n 1) && \
         test -n "$chrome_path" && \
